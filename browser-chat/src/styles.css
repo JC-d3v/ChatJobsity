@@ -1,4 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --col-01: #ff0000;
+  --col-02: #00ff00;
+  --col-03: #0000ff;
+}
+* {
+  padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  /* outline: dotted 1px var(--col-01); */
+}
 
 .main-container {
   margin-top: 60px;
@@ -21,7 +31,6 @@
 .app-mensajes {
   overflow-y: scroll;
   height: 300px;
-  /*background:gray;*/
   padding: 10px;
 }
 

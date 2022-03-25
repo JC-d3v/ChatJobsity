@@ -9,6 +9,9 @@ import { FormsModule } from "@angular/forms";
 // components
 import { ChatComponent } from './components/chat/chat.component';
 
+//services
+import { ChatService } from './services/chat.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,7 +22,7 @@ import { ChatComponent } from './components/chat/chat.component';
     AppRoutingModule,
     FormsModule
   ],
-  providers: [],
+  providers: [ChatService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
