@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { Message } from '../interfaces/message.interface';
 
@@ -6,6 +8,13 @@ import { Message } from '../interfaces/message.interface';
   providedIn: 'root'
 })
 export class ChatService {
+
+  // private apiURL: string = 'https://localhost:44332/api/users';
+  private apiURL: string = 'https://restcountries.com/v2/name/car';
+  // private apiURL: string = 'https://rickandmortyapi.com/api/episode/3';
+  // private apiURL: string = 'https://rickandmortyapi.com/api/character/12';
+
+
 
   public chats: Message[] = [];
 
@@ -25,12 +34,16 @@ export class ChatService {
     }
   ]
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   loadMessages() {
-    // TODO: cargar mensajes chat
     this.chats = this.chats_temp;
     console.log(`servicio de Carga de mensajes `, this.chats);
+    // TODO: cargar mensajes chat
+    this.http.get(this.apiURL)
+      .subscribe(response => {
+        console.log(response);
+      });
   }
 
   addMessage(messageStr: string) {
