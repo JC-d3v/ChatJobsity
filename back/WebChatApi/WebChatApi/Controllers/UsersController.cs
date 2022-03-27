@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebChatApi.Entidades;
+using WebChatApi.Entities;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -26,7 +26,7 @@ namespace WebChatApi.Controllers
 	}
 
 	[ApiController]
-	[Route("api/usuarios")]
+	[Route("api/users")]
 	public class UsersController : ControllerBase
 	{
 		private readonly ApplicationDbContext context;
@@ -36,22 +36,16 @@ namespace WebChatApi.Controllers
 			this.context = context;
 		}
 
-		//[HttpGet("{uid:int}")]
-		//public async Task<ActionResult<List<Usuario>>> Get(string uid)
-		//{
-		//	return await context.Usuarios.FirstOrDefaultAsync(x => x.Nombre == uid);
-		//}
-
 		[HttpGet]
-		public async Task<ActionResult<List<Usuario>>> Get()
+		public async Task<ActionResult<List<User>>> Get()
 		{
-			return await context.Usuarios.ToListAsync();
+			return await context.Users.ToListAsync();
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> Post(Usuario usuario)
+		public async Task<ActionResult> Post(User user)
 		{
-			context.Add(usuario);
+			context.Add(user);
 			await context.SaveChangesAsync();
 			return Ok();
 		}

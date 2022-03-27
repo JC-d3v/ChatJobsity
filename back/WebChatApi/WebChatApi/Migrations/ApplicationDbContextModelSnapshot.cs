@@ -19,15 +19,36 @@ namespace WebChatApi.Migrations
                 .HasAnnotation("ProductVersion", "5.0.15")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("WebChatApi.Entidades.Mensaje", b =>
+            modelBuilder.Entity("WebChatApi.Entities.ChatRoom", b =>
                 {
-                    b.Property<int>("MensajeId")
+                    b.Property<int>("ChatId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("MensajeChat")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ChatId");
+
+                    b.ToTable("ChatRooms");
+                });
+
+            modelBuilder.Entity("WebChatApi.Entities.Message", b =>
+                {
+                    b.Property<int>("MessageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ChatRoomChatId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MessageChat")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MessageChatroomId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Time")
                         .HasColumnType("datetime2");
@@ -35,24 +56,26 @@ namespace WebChatApi.Migrations
                     b.Property<int>("UId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UsuarioUId")
+                    b.Property<int?>("UserUId")
                         .HasColumnType("int");
 
-                    b.HasKey("MensajeId");
+                    b.HasKey("MessageId");
 
-                    b.HasIndex("UsuarioUId");
+                    b.HasIndex("ChatRoomChatId");
 
-                    b.ToTable("Mensajes");
+                    b.HasIndex("UserUId");
+
+                    b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("WebChatApi.Entidades.Usuario", b =>
+            modelBuilder.Entity("WebChatApi.Entities.User", b =>
                 {
                     b.Property<int>("UId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Nombre")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
@@ -60,16 +83,22 @@ namespace WebChatApi.Migrations
 
                     b.HasKey("UId");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("WebChatApi.Entidades.Mensaje", b =>
+            modelBuilder.Entity("WebChatApi.Entities.Message", b =>
                 {
-                    b.HasOne("WebChatApi.Entidades.Usuario", "Usuario")
+                    b.HasOne("WebChatApi.Entities.ChatRoom", "ChatRoom")
                         .WithMany()
-                        .HasForeignKey("UsuarioUId");
+                        .HasForeignKey("ChatRoomChatId");
 
-                    b.Navigation("Usuario");
+                    b.HasOne("WebChatApi.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserUId");
+
+                    b.Navigation("ChatRoom");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using WebChatApi.Entidades;
+using WebChatApi.Entities;
 
 namespace WebChatApi
 {
@@ -14,8 +14,9 @@ namespace WebChatApi
 		{
 
 		}
-		public DbSet<Usuario> Usuarios { get; set; }
-		public DbSet<Mensaje> Mensajes { get; set; }
+		public DbSet<User> Users { get; set; }
+		public DbSet<Message> Messages { get; set; }
+		public DbSet<ChatRoom> ChatRooms { get; set; }
 
 	}
 }
