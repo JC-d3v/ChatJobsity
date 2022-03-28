@@ -9,7 +9,9 @@ namespace WebChatApi.Entities
 	public class ChatRoom
 	{
 		[Key]
-		public int ChatId { get; set; }
+		public int ChatRoomId { get; set; }
 		public string Name { get; set; }
+
+		public ICollection<Message> Messages { get; set; }
 	}
 }

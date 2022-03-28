@@ -10,11 +10,11 @@ namespace WebChatApi.Entities
 	{
 		[Key]
 		public int MessageId { get; set; }
-		public int UId { get; set; }
+		public int UserId { get; set; }
 		public User User { get; set; }
-		public int MessageChatroomId { get; set; }
+		public int ChatroomId { get; set; }
 		public ChatRoom ChatRoom { get; set; }
-		public string MessageChat { get; set; }
+		public string Text { get; set; }
 		public DateTime Time { get; set; }
 	}
 }
