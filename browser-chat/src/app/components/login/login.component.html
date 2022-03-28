@@ -1,11 +1,13 @@
-<div class="input-group mb-3">
+<div class="input-group mb-3" *ngIf=!false>
   <span class="input-group-text">U.name</span>
   <input class="form-control" type="text" name="" id="" placeholder="Please your login here.">
-
 </div>
-<div class="input-group mb-3">
+<div class="input-group mb-3" *ngIf=!false>
   <span class="input-group-text">Password</span>
   <input class="form-control" type="password" name="" id="">
 </div>
 
-<button class="btn  btn-outline-secondary">Login</button>
+<!-- TODO: register, login, logout-->
+<button class="btn  btn-outline-secondary" *ngIf=true>Register</button>
+<button class="btn  btn-outline-secondary" *ngIf=true>Login</button>
+<button class="btn  btn-outline-secondary" *ngIf=!false>Logout</button>

@@ -9,36 +9,26 @@ import { Message } from '../interfaces/message.interface';
 })
 export class ChatService {
 
-  // private apiURL: string = 'https://localhost:44332/api/users';
-  private apiURL: string = 'https://restcountries.com/v2/name/car';
-  // private apiURL: string = 'https://rickandmortyapi.com/api/episode/3';
-  // private apiURL: string = 'https://rickandmortyapi.com/api/character/12';
-
-
+  private apiURL: string = 'https://localhost:44332/api/users';
 
   public chats: Message[] = [];
 
-  chats_temp: Message[] = [
-    {
-      uid: '1',
-      name: 'jorge',
-      time: 123,
-      message: 'first'
-    },
+  // chats_temp: Message[] = [
+  //   {
+  //     MessageId: 1,
+  //     Userid: 1,
+  //     ChatroomID: 1,
+  //     text: 'string',
+  //     time:"2018-08-01"
+  //   }
 
-    {
-      uid: '1',
-      name: 'jorge',
-      time: 123,
-      message: 'second'
-    }
-  ]
+  // ]
 
   constructor(private http: HttpClient) { }
 
   loadMessages() {
-    this.chats = this.chats_temp;
-    console.log(`servicio de Carga de mensajes `, this.chats);
+    // this.chats = this.chats_temp;
+    // console.log(`servicio de Carga de mensajes `, this.chats);
     // TODO: cargar mensajes chat
     this.http.get(this.apiURL)
       .subscribe(response => {
@@ -47,13 +37,13 @@ export class ChatService {
   }
 
   addMessage(messageStr: string) {
-    let message: Message = {
-      uid: '2',
-      name: 'demo',
-      time: new Date().getTime(),
-      message: messageStr
-    }
-    this.chats.push(message);
-    console.log(`agregando un mensaje`, message.message);
+    // let message: Message = {
+    //   uid: '2',
+    //   name: 'demo',
+    //   time: new Date().getTime(),
+    //   message: messageStr
+    // }
+    // this.chats.push(message);
+    // console.log(`agregando un mensaje`, message.message);
   }
 }

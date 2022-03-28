@@ -1,25 +1,27 @@
 <h1>Chat</h1>
+<select name="select_box">
+  <option selected="yes">Room 1</option>
+  <option>Room 2</option>
+  <option>Room 3</option>
+</select>
 <hr>
 <div class="app-mensajes" id="app-mensajes">
-  <div class="text-end">
-    <span class="badge bg-primary">JorGGGG</span>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente facere qui iste mollitia? Consectetur,
-      suscipit!</p>
-  </div>
-  <div>
-    <span class="badge bg-warning text-dark">EgroJ</span>
-    <p>Lorem ipsum dolor sit amet.</p>
-  </div>
-  <div>
-    <span class="badge bg-warning text-dark">EgroJ</span>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse?</p>
-  </div>
+
   <div>
     <span class="badge bg-warning text-dark">EgroJ</span>
     <p>loremx8</p>
+  </div>
+
+  <div class="text-end" *ngFor="let chat of _cs.chats">
+    <span class="badge bg-primary">JorGGGG</span>
+    <p> {{ chat.text}} </p>
   </div>
 
 </div>
 <hr>
 <input class="form-control" type="text" name="mensaje" placeholder="Write your message here" [(ngModel)]="message"
   (keyup.enter)="sendMessage()">
+
+<div class="mb-3">
+
+</div>

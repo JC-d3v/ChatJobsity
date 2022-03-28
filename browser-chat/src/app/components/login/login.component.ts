@@ -5,10 +5,13 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit {
-
+  authenticated: boolean = true;
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  login() {
+    this.authenticated = !this.authenticated;
+  }
 }

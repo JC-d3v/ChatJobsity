@@ -1,6 +1,7 @@
 export interface Message {
-  uid: string;
-  name: string;
-  time: number;
-  message: string;
+  MessageId: number;
+  Userid: number;
+  ChatroomID: number;
+  text: string;
+  time: Date;
 }
