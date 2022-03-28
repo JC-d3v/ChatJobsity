@@ -28,6 +28,7 @@ namespace WebChatApi
 		public void ConfigureServices(IServiceCollection services)
 		{
 
+			services.AddCors();
 			services.AddControllers();
 			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("defaultConection")));
 			services.AddSwaggerGen(c =>
@@ -45,6 +46,13 @@ namespace WebChatApi
 				app.UseSwagger();
 				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebChatApi v1"));
 			}
+
+			app.UseCors(x => x
+				.AllowAnyMethod()
+				.AllowAnyHeader()
+				.SetIsOriginAllowed(origin => true) // allow any origin
+													//.WithOrigins("https://localhost:44351")); // Allow only this origin can also have multiple origins separated with comma
+				.AllowCredentials());
 
 			app.UseHttpsRedirection();
 
