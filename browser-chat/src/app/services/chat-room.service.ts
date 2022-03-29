@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs';
 import { Chatroom } from '../interfaces/chatroom.interface';
 
 @Injectable({
@@ -14,11 +15,11 @@ export class ChatRoomService {
   constructor(private http: HttpClient) { }
 
   loadChatrooms() {
-    this.http.get(this.apiURL)
-      .subscribe(response => {
-        console.log(`servico de carga de chatrooms -->`, response);
-      });
+    return this.http.get(this.apiURL).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
   }
-
 
 }

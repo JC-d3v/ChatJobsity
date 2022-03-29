@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 import { Message } from '../interfaces/message.interface';
 
@@ -9,7 +9,7 @@ import { Message } from '../interfaces/message.interface';
 })
 export class ChatService {
 
-  private apiURL: string = 'https://localhost:44332/api/users';
+  private apiURL: string = 'https://localhost:44332/api/messages/';
 
   public chats: Message[] = [];
 
@@ -26,24 +26,43 @@ export class ChatService {
 
   constructor(private http: HttpClient) { }
 
-  loadMessages() {
-    // this.chats = this.chats_temp;
-    // console.log(`servicio de Carga de mensajes `, this.chats);
-    // TODO: cargar mensajes chat
-    this.http.get(this.apiURL)
-      .subscribe(response => {
-        console.log(response);
-      });
-  }
+  // loadMessages() {
+  //   // this.chats = this.chats_temp;
+  //   // console.log(`servicio de Carga de mensajes `, this.chats);
+  //   // TODO: cargar mensajes chat
+  //   this.http.get(this.apiURL)
+  //     .subscribe(response => {
+  //       console.log(response);
+  //     });
+  // }
 
-  addMessage(messageStr: string) {
-    // let message: Message = {
-    //   uid: '2',
-    //   name: 'demo',
-    //   time: new Date().getTime(),
-    //   message: messageStr
-    // }
-    // this.chats.push(message);
-    // console.log(`agregando un mensaje`, message.message);
+  loadMessages(chatRoomId: number) {
+    if (chatRoomId > 0) {
+      return this.http.get(this.apiURL + chatRoomId)
+        .pipe(
+          map((response: any) => {
+            return response;
+          })
+        );
+    }
+    else
+      return this.http.get(this.apiURL)
+        .pipe(
+          map((response: any) => {
+            return response;
+          })
+        );
+  }
+  addMessage(messageStr: string, chatRoomId: number) {
+    let message = {
+      text: messageStr,
+      chatRoomId: chatRoomId
+    }
+    return this.http.post(this.apiURL, message)
+      .pipe(
+        map((response: any) => {
+          return response;
+        })
+      );
   }
 }

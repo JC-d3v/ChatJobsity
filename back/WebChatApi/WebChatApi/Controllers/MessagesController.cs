@@ -25,15 +25,36 @@ namespace WebChatApi.Controllers
 			return await context.Messages.ToListAsync();
 		}
 
+		[HttpGet("{chatroomId}")]
+		public async Task<ActionResult<List<MessageResponse>>> Get(int chatroomId)
+		{
+			return await context.Messages.Where(x=>x.ChatroomId==chatroomId)
+                .Select(Message => new MessageResponse
+                {
+					MessageId=Message.MessageId,
+					Text=Message.Text,
+					Time=Message.Time,
+					User=Message.User.Name,
+					ChatRoom=Message.ChatRoom.Name
+                }).ToListAsync();
+        }
+
 		[HttpPost]
 		public async Task<ActionResult> Post(Message message)
 		{
-			//TODO: The stock command won’t be saved on the database as a post.
+			message.UserId = 1;
+			message.Time = DateTime.Now;
+			if (!message.Text.StartsWith("/"))
 			{
-				context.Add(message);
+				context.Messages.Add(message);
 
 				await context.SaveChangesAsync();
 				return Ok();
+			}
+			else
+			{
+				return Ok();
+				//TODO: Process Command.
 			}
 		}
 	}

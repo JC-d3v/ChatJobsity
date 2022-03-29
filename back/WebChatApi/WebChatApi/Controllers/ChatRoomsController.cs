@@ -25,14 +25,13 @@ namespace WebChatApi.Controllers
 			return await context.ChatRooms.ToListAsync();
 		}
 
-		//FIXME: 
-		//[HttpGet("{chatroom:int}")]
-		//public async Task<ActionResult<List<Message>>> Get(int chatroom)
-		//{
-		//	return await context.Messages.Include(x => x.MessageChatroomId).FirstOrDefaultAsync(x => x.MessageChatroomId == 1);
-		//}
+		[HttpGet("{chatroomId}")]
+        public async Task<ActionResult<ChatRoom>> Get(int chatroomId)
+        {
+            return await context.ChatRooms.FirstOrDefaultAsync(x => x.ChatRoomId == chatroomId);
+        }
 
-		[HttpPost]
+        [HttpPost]
 		public async Task<ActionResult> Post(ChatRoom chatroom)
 		{
 			{

@@ -1,27 +1,34 @@
 <h1>Chat</h1>
-<select name="select_box">
-  <option selected="yes">Room 1</option>
-  <option>Room 2</option>
-  <option>Room 3</option>
+<select
+  name="select_box"
+  (keyup.enter)="loadChatRoom()"
+  (change)="selectChatRoom()"
+>
+  <option *ngFor="let chatRoom of chatRooms; let i = index" [value]="i">
+    {{ chatRoom.name }}
+  </option>
 </select>
-<hr>
-<div class="app-mensajes" id="app-mensajes">
 
+<hr />
+<div class="app-mensajes" id="app-mensajes">
   <div>
     <span class="badge bg-warning text-dark">EgroJ</span>
     <p>loremx8</p>
   </div>
 
-  <div class="text-end" *ngFor="let chat of _cs.chats">
-    <span class="badge bg-primary">JorGGGG</span>
-    <p> {{ chat.text}} </p>
+  <div class="text-end" *ngFor="let chat of messages">
+    <span class="badge bg-primary">{{ chat.user }} {{ chat.time }}</span>
+    <p>{{ chat.text }}</p>
   </div>
-
 </div>
-<hr>
-<input class="form-control" type="text" name="mensaje" placeholder="Write your message here" [(ngModel)]="message"
-  (keyup.enter)="sendMessage()">
+<hr />
+<input
+  class="form-control"
+  type="text"
+  name="mensaje"
+  placeholder="Write your message here"
+  [(ngModel)]="message"
+  (keyup.enter)="sendMessage()"
+/>
 
-<div class="mb-3">
-
-</div>
+<div class="mb-3"></div>
