@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,7 +13,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using WebChatApi.Auth;
 
 namespace WebChatApi
 {
@@ -31,6 +35,49 @@ namespace WebChatApi
 			services.AddCors();
 			services.AddControllers();
 			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("defaultConection")));
+
+			services.AddSingleton<IJwtFactory, JwtFactory>();
+
+			var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
+			string SecretKey = jwtAppSettingOptions[nameof(JwtIssuerOptions.SigningKey)]; // "iNivDmHLpUA223sqsfhqGbMRdRj1PVkH"; // todo: get this from somewhere secure
+			SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
+
+			services.Configure<JwtIssuerOptions>(options =>
+			{
+				options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
+				options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
+				options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
+
+			});
+
+			var tokenValidationParameters = new TokenValidationParameters
+			{
+				ValidateIssuer = true,
+				ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
+
+				ValidateAudience = true,
+				ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
+
+				ValidateIssuerSigningKey = true,
+				IssuerSigningKey = _signingKey,
+
+				RequireExpirationTime = false,
+				ValidateLifetime = true,
+				ClockSkew = TimeSpan.Zero,
+			};
+
+			services.AddAuthentication(options =>
+			{
+				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			}).AddJwtBearer(configureOptions =>
+			{
+				configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
+				configureOptions.TokenValidationParameters = tokenValidationParameters;
+				configureOptions.SaveToken = true;
+			});
+
+
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebChatApi", Version = "v1" });
