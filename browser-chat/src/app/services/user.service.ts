@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { User } from '../interfaces/user.interface';
 
 @Injectable({
@@ -7,15 +8,13 @@ import { User } from '../interfaces/user.interface';
 })
 export class UsersService {
 
-  private apiURL: string = 'https://localhost:44332/api/users';
-
   public users: User[] = [];
 
   constructor(private http: HttpClient) { }
 
   addUser() {
     // TODO: REVISAR POST
-    this.http.get(this.apiURL)
+    this.http.get(environment.serviceURL + '/users')
       .subscribe(response => {
         console.log(`servico para addiion de usuarios`);
       });

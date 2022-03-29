@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 import { Message } from '../interfaces/message.interface';
 
@@ -8,8 +9,6 @@ import { Message } from '../interfaces/message.interface';
   providedIn: 'root'
 })
 export class ChatService {
-
-  private apiURL: string = 'https://localhost:44332/api/messages/';
 
   public chats: Message[] = [];
 
@@ -38,7 +37,7 @@ export class ChatService {
 
   loadMessages(chatRoomId: number) {
     if (chatRoomId > 0) {
-      return this.http.get(this.apiURL + chatRoomId)
+      return this.http.get(environment.serviceURL + '/messages/' + chatRoomId)
         .pipe(
           map((response: any) => {
             return response;
@@ -46,7 +45,7 @@ export class ChatService {
         );
     }
     else
-      return this.http.get(this.apiURL)
+      return this.http.get(environment.serviceURL + '/messages/')
         .pipe(
           map((response: any) => {
             return response;
@@ -58,7 +57,7 @@ export class ChatService {
       text: messageStr,
       chatRoomId: chatRoomId
     }
-    return this.http.post(this.apiURL, message)
+    return this.http.post(environment.serviceURL + '/messages/', message)
       .pipe(
         map((response: any) => {
           return response;
