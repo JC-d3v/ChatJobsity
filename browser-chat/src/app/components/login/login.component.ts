@@ -17,8 +17,9 @@ export class LoginComponent implements OnInit {
   login() {
     this.authenticated = !this.authenticated;
     this.usersService.login(this.email, this.password).subscribe(
-      response =>
-        console.log(response)
+      response => {
+        this.usersService.saveStorage(response.auth_token, response.id);
+      }
     )
   }
 }

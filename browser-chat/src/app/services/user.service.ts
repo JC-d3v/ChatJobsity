@@ -10,8 +10,29 @@ import { User } from '../interfaces/user.interface';
 export class UsersService {
 
   public users: User[] = [];
+  token?: string = '';
+  userId?: number = 0;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.loadStorage();
+  }
+
+  loadStorage() {
+    if (sessionStorage.getItem('Token')) {
+      this.token = sessionStorage.getItem('Token')?.toString();
+      this.userId = Number(sessionStorage.getItem('UserId')?.toString());
+    } else {
+      this.token = '';
+      this.userId = 0;
+      // this.menu = [];
+    }
+  }
+  saveStorage(token: string, userId: number) {
+    sessionStorage.setItem('Token', token);
+    sessionStorage.setItem('UserId', userId.toString());
+    this.userId = userId;
+    this.token = token;
+  }
 
   addUser() {
     // TODO: REVISAR POST

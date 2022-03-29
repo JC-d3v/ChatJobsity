@@ -6,11 +6,18 @@
     name=""
     id=""
     placeholder="Please your login here."
+    [(ngModel)]="email"
   />
 </div>
 <div class="input-group mb-3" *ngIf="!false">
   <span class="input-group-text">Password</span>
-  <input class="form-control" type="password" name="" id="" />
+  <input
+    class="form-control"
+    type="password"
+    name=""
+    id=""
+    [(ngModel)]="password"
+  />
 </div>
 
 <!-- TODO: register, login, logout-->
