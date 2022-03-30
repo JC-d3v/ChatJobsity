@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -43,7 +45,7 @@ namespace WebChatApi.Controllers
         }
 
 		[HttpPost]
-		public async Task<ActionResult> Post(Message message)
+		public async Task<ActionResult<MessageResponse>> Post(Message message)
 		{
 			var accessToken = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
 			var handler = new JwtSecurityTokenHandler();
@@ -62,9 +64,50 @@ namespace WebChatApi.Controllers
 			}
 			else
 			{
+				if (message.Text.StartsWith("/stock="))
+                {
+					message.Text = message.Text.Substring(7);
+					var stockData = GetQuoteValues(message.Text);
+					return new MessageResponse() {
+						User="StockBot",
+						ChatRoom="",
+						Text= string.Format($"{stockData[0]} quote is ${stockData[6]} per share"),
+						Time = DateTime.Now
+					};
+					var result=string.Format($"{stockData[0]} quote is ${stockData[6]} per share");
+				}
+				else
+						{ }
 				return Ok();
 				//TODO: Process Command.
 			}
+		}
+
+		private static List<string> GetQuoteValues(string stockCode)
+		{
+			string url = $"https://stooq.com/q/l/?s={stockCode}&f=sd2t2ohlcv&h&e=csv";
+
+			string fileList = GetCSVData(url);
+			string[] tempStr;
+
+			fileList = fileList.Replace('\r', '|').Replace("\n", string.Empty);
+
+			tempStr = fileList.Split('|');
+
+			List<string> values = tempStr[1].Split(',').ToList();
+
+			return values;
+		}
+		private static string GetCSVData(string url)
+		{
+			HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+			HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+
+			StreamReader sr = new StreamReader(resp.GetResponseStream());
+			string results = sr.ReadToEnd();
+			sr.Close();
+
+			return results;
 		}
 	}
 }

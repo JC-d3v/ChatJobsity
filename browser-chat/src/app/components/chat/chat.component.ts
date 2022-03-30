@@ -13,6 +13,7 @@ export class ChatComponent {
   message: string = '';
   chatRooms: any;
   messages: any;
+  botmessages: any = [];
   chatRoom: any;
   chatRoomIndex: number = 0;
   constructor(public chatService: ChatService,
@@ -30,8 +31,13 @@ export class ChatComponent {
       return;
     }
     this.chatService.addMessage(this.message, this.chatRoom.chatRoomId).subscribe(
-      () =>
-        this.loadChatRoom()
+      (response) => {
+        if (response) {
+          this.botmessages.push(response);
+          console.log(this.botmessages);
+        }
+        this.loadChatRoom();
+      }
     );
     this.message = '';
   }
@@ -45,7 +51,7 @@ export class ChatComponent {
     this.chatService.loadMessages(this.chatRoom.chatRoomId).subscribe(
       messages => {
         this.messages = messages;
-        console.log(this.messages);
+        this.messages = this.messages.concat(this.botmessages);
       });
   }
 }
