@@ -14,6 +14,7 @@ export class ChatComponent {
   chatRooms: any;
   messages: any;
   chatRoom: any;
+  chatRoomIndex: number = 0;
   constructor(public chatService: ChatService,
     public chatRoomService: ChatRoomService,
   ) {
@@ -36,7 +37,8 @@ export class ChatComponent {
   }
 
   selectChatRoom() {
-
+    this.chatRoom = this.chatRooms[this.chatRoomIndex];
+    this.loadChatRoom()
   }
 
   loadChatRoom() {

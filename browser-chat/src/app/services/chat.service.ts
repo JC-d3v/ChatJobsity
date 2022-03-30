@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 import { Message } from '../interfaces/message.interface';
+import { UsersService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,9 @@ export class ChatService {
 
   // ]
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private userService: UsersService
+  ) { }
 
   // loadMessages() {
   //   // this.chats = this.chats_temp;
@@ -57,7 +60,13 @@ export class ChatService {
       text: messageStr,
       chatRoomId: chatRoomId
     }
-    return this.http.post(environment.serviceURL + '/messages/', message)
+    return this.http.post(environment.serviceURL + '/messages/', message,
+      {
+        headers: {
+          Authorization: `Bearer ${this.userService.token}`
+        }
+      }
+    )
       .pipe(
         map((response: any) => {
           return response;

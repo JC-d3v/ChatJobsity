@@ -3,6 +3,7 @@
   name="select_box"
   (keyup.enter)="loadChatRoom()"
   (change)="selectChatRoom()"
+  [(ngModel)]="chatRoomIndex"
 >
   <option *ngFor="let chatRoom of chatRooms; let i = index" [value]="i">
     {{ chatRoom.name }}
