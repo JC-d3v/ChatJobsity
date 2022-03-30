@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using WebChatApi.Entities;
 
 namespace WebChatApi.Controllers
@@ -42,7 +45,13 @@ namespace WebChatApi.Controllers
 		[HttpPost]
 		public async Task<ActionResult> Post(Message message)
 		{
-			message.UserId = 1;
+			var accessToken = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+			var handler = new JwtSecurityTokenHandler();
+
+			var jsonToken = handler.ReadToken(accessToken);
+
+			var tokenS = jsonToken as JwtSecurityToken;
+			message.UserId = Convert.ToInt32( tokenS.Claims.First(claim => claim.Type == "Id").Value);
 			message.Time = DateTime.Now;
 			if (!message.Text.StartsWith("/"))
 			{
